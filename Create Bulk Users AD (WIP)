@@ -1,0 +1,33 @@
+import-module activedirectory
+$users=import-CSV c:\ADU.csv
+Foreach($User in $users)
+{
+$Password = (ConvertTo-SecureString -AsPlainText $user.password -force)
+
+$Parameters = @{
+'samaccountname' = $user.samaccountname
+'userprincipalname' = $user.userprincipalname
+'name' = $user.name
+'company' = $user.company
+'officephone' = $user.officephone
+'emailaddress' = $user.emailaddress
+'givenname' = $user.givenname
+'surname' = $user.surname
+'accountpassword' = $user.password
+'enabled' = $true
+'path' = $user.path
+'description' = $user.description
+'department' = $user.deperment
+'employeeid' = $user.employeeid
+'city' = $user.city
+'title' = $user.title
+'displayname' = $displayname
+}
+
+New-ADUser @Parameters
+}
+
+$list = import-csv "C:\ADU.csv" | % {
+$user = $_.samaccountname
+$ID = $_.manager
+set-aduser $user -manager $ID
